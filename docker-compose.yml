@@ -1,0 +1,37 @@
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - "/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - prometheus-data:/prometheus
+    networks:
+      - localprom
+    ports:
+      - 9090:9090
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node_exporter
+    networks:
+      - localprom
+    ports:
+      - 9100:9100
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - localprom
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
+networks:
+  localprom:
+    driver: bridge
+
+volumes:
+  grafana-data:
+    driver: local
+  prometheus-data:
+    driver: local
