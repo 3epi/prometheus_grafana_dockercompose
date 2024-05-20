@@ -27,7 +27,7 @@ services:
       - grafana-data:/var/lib/grafana
       - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
   kafka-producer:
-    build: .
+    build: /producer/.
     container_name: kafka-producer
     networks: 
       - localprom
