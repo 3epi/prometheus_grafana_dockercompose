@@ -12,7 +12,7 @@ def create_kafka_producer(bootstrap_servers, max_retries=3, retry_interval=5):
     raise RuntimeError("Failed to connect to Kafka brokers after multiple attempts.")
 
 # Define Kafka bootstrap servers
-bootstrap_servers = 'localhost:9092'
+bootstrap_servers = 'kafka:9092'
 
 # Create Kafka producer with retry mechanism
 producer = create_kafka_producer(bootstrap_servers)
