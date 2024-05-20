@@ -26,6 +26,36 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
+  kafka-producer:
+    build: .
+    container_name: kafka-producer
+    networks: 
+      - localprom
+    depends_on:
+      - kafka
+  kafka:
+    image: docker.arvancloud.ir/apache/kafka:latest
+    container_name: kafka
+    networks: 
+      - localprom
+    ports: 
+      - 9092:9092
+  # kafka:
+  #   image: docker.arvancloud.ir/confluentinc/cp-kafka
+  #   container_name: kafka
+  #   hostname: kafka
+  #   ports:
+  #     - "9092:9092"
+  #   environment:
+  #     KAFKA_NODE_ID: 1
+  #     KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT'
+  #     KAFKA_LISTENERS: 'INTERNAL://kafka:29092,CONTROLLER://kafka:29093,EXTERNAL://0.0.0.0:9092'
+  #     KAFKA_ADVERTISED_LISTENERS: 'INTERNAL://kafka:29092,EXTERNAL://localhost:9092'
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: 'INTERNAL'
+  #     CLUSTER_ID: 'ciWo7IWazngRchmPES6q5A=='
+  #     KAFKA_LOG_DIRS: '/tmp/kraft-combined-logs'
+
 networks:
   localprom:
     driver: bridge
