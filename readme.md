@@ -1,9 +1,7 @@
 kafka : 
     kafka is a event streaming platform used to stream data in real time, main concepts are topic , partitions , broker , producer and consumer. basically you use a producer to provide/make data then give the data to a kafka broker which then stores it in one or more topics (as you have configured). for reliability and scalability so it divides the data into even partitions in a topic which makes it faster and more reliable. after that you can consume that data from the topic in your kafka broker/brokers and use it however you want.
-
     you gotta use zookeeper which is for handling the brokers or you can use kraft (i used zookeeper in this project).
     using a python producer i produced random data and gave it to a single kafka broker and after that with a consumer stored that data into a database. for making consumer and producer i used kafka-python library.
-
     the hardest part between these was connecting the producer and consumer containers to the kafka broker :D, what fixed the problem was checking the server.properties file of kafka.
     note that when you use docker everything is located in the /opt directory.
 
