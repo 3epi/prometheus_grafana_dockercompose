@@ -5,7 +5,7 @@ import random
 import string
 import time
 
-def generate_random_string(length=random.randint(10 , 1000)):
+def generate_random_string(length):
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
 
@@ -28,8 +28,9 @@ bootstrap_servers = 'kafka:9092'
 producer = create_kafka_producer(bootstrap_servers)
 
 while (True):
-    message = generate_random_string()
-    producer.send('mytopic', message)
+    message = generate_random_string(random.randint(10 , 1000))
+    message_bytes = message.encode('utf-8')
+    producer.send('mytopic', message_bytes)
     print("{message} sent")
     time.sleep(5)
     producer.flush()
