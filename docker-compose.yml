@@ -1,31 +1,31 @@
 services:
-  # prometheus:
-  #   image: docker.arvancloud.ir/prom/prometheus:latest
-  #   container_name: prometheus
-  #   volumes:
-  #     - "/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
-  #     - prometheus-data:/prometheus
-  #   networks:
-  #     - localprom
-  #   ports:
-  #     - 9090:9090
-  # node-exporter:
-  #   image: docker.arvancloud.ir/prom/node-exporter
-  #   container_name: node_exporter
-  #   networks:
-  #     - localprom
-  #   ports:
-  #     - 9100:9100
-  # grafana:
-  #   image: docker.arvancloud.ir/grafana/grafana:latest
-  #   container_name: grafana
-  #   networks:
-  #     - localprom
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - grafana-data:/var/lib/grafana
-  #     - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
+  prometheus:
+    image: docker.arvancloud.ir/prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - "/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - prometheus-data:/prometheus
+    networks:
+      - localprom
+    ports:
+      - 9090:9090
+  node-exporter:
+    image: docker.arvancloud.ir/prom/node-exporter
+    container_name: node_exporter
+    networks:
+      - localprom
+    ports:
+      - 9100:9100
+  grafana:
+    image: docker.arvancloud.ir/grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - localprom
+    ports:
+      - 3000:3000
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
   kafka-producer:
     build: producer/.
     container_name: kafka-producer
@@ -41,6 +41,7 @@ services:
     depends_on:
       - kafka
       - kafka-producer
+      - mongo
   zookeeper:
     image: docker.arvancloud.ir/bitnami/zookeeper:latest
     container_name: zookeeper
@@ -67,6 +68,11 @@ services:
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     depends_on:
       - zookeeper
+  mongo:
+    image: docker.arvancloud.ir/bitnami/mongodb:latest
+    container_name: mongo
+    networks:
+      - localprom
 networks:
   localprom:
     driver: bridge
