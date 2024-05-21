@@ -50,29 +50,21 @@ services:
       - localprom
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
-  # kafka:
-  #   image: docker.arvancloud.ir/apache/kafka:latest
-  #   container_name: kafka
-  #   networks: 
-  #     - localprom
-  #   ports: 
-  #     - 9092:9092
   kafka:
     image: docker.arvancloud.ir/bitnami/kafka:latest
     container_name: kafka
     hostname: kafka
     ports:
       - 9092:9092
-      - 29092:29092
     networks:
       - localprom
     environment:
-      - KAFKA_LISTENERS=EXTERNAL_SAME_HOST://:29092,INTERNAL://:9092
-      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,EXTERNAL_SAME_HOST://localhost:29092
-      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL_SAME_HOST:PLAINTEXT
-      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_BROKER_ID=1
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
     depends_on:
       - zookeeper
 networks:
