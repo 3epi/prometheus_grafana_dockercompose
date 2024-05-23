@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: docker.arvancloud.ir/prom/prometheus:latest
+    image: docker.arvancloud.ir/prom/prometheus:v2.52.0
     container_name: prometheus
     volumes:
       - "/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
@@ -10,14 +10,14 @@ services:
     ports:
       - 9090:9090
   node-exporter:
-    image: docker.arvancloud.ir/prom/node-exporter
+    image: docker.arvancloud.ir/prom/node-exporter:v1.8.1
     container_name: node_exporter
     networks:
       - localprom
     ports:
       - 9100:9100
   grafana:
-    image: docker.arvancloud.ir/grafana/grafana:latest
+    image: docker.arvancloud.ir/grafana/grafana:10.1.10
     container_name: grafana
     networks:
       - localprom
@@ -43,7 +43,7 @@ services:
       - kafka-producer
       - mongo
   zookeeper:
-    image: docker.arvancloud.ir/bitnami/zookeeper:latest
+    image: docker.arvancloud.ir/bitnami/zookeeper:3.9.2
     container_name: zookeeper
     ports: 
       - 2181:2181
@@ -52,7 +52,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafka:
-    image: docker.arvancloud.ir/bitnami/kafka:latest
+    image: docker.arvancloud.ir/bitnami/kafka:3.7.0
     container_name: kafka
     hostname: kafka
     ports:
@@ -69,7 +69,7 @@ services:
     depends_on:
       - zookeeper
   mongo:
-    image: docker.arvancloud.ir/bitnami/mongodb:latest
+    image: docker.arvancloud.ir/bitnami/mongodb:7.0.9
     container_name: mongo
     networks:
       - localprom
