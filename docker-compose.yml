@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: docker.arvancloud.ir/prom/prometheus:v2.52.0
     container_name: prometheus
     volumes:
       - "/etc/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
@@ -10,14 +10,14 @@ services:
     ports:
       - 9090:9090
   node-exporter:
-    image: prom/node-exporter
+    image: docker.arvancloud.ir/prom/node-exporter:v1.8.1
     container_name: node_exporter
     networks:
       - localprom
     ports:
       - 9100:9100
   grafana:
-    image: grafana/grafana:latest
+    image: docker.arvancloud.ir/grafana/grafana:10.1.10
     container_name: grafana
     networks:
       - localprom
@@ -26,6 +26,53 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
       - /etc/grafana/grafana.ini:/etc/grafana/grafana.ini
+  kafka-producer:
+    build: producer/.
+    container_name: kafka-producer
+    networks: 
+      - localprom
+    depends_on:
+      - kafka
+  kafka-consumer:
+    build: consumer/.
+    container_name: kafka-consumer
+    networks: 
+      - localprom
+    depends_on:
+      - kafka
+      - kafka-producer
+      - mongo
+  zookeeper:
+    image: docker.arvancloud.ir/bitnami/zookeeper:3.9.2
+    container_name: zookeeper
+    ports: 
+      - 2181:2181
+    networks: 
+      - localprom
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka:
+    image: docker.arvancloud.ir/bitnami/kafka:3.7.0
+    container_name: kafka
+    hostname: kafka
+    ports:
+      - 9092:9092
+    networks:
+      - localprom
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+    depends_on:
+      - zookeeper
+  mongo:
+    image: docker.arvancloud.ir/bitnami/mongodb:7.0.9
+    container_name: mongo
+    networks:
+      - localprom
 networks:
   localprom:
     driver: bridge
