@@ -2,9 +2,9 @@
 
 ## Kafka 
 
-*Kafka* is a event streaming platform used to stream data in real time, main concepts are topic , partitions , broker , producer and consumer. basically you use a producer to provide/make data then give the data to a kafka broker which then stores it in one or more topics (as you have configured). for reliability and scalability so it divides the data into even partitions in a topic which makes it faster and more reliable. after that you can consume that data from the topic in your kafka broker/brokers and use it however you want.
+**_Kafka_** is a event streaming platform used to stream data in real time, main concepts are topic , partitions , broker , producer and consumer. basically you use a producer to provide/make data then give the data to a kafka broker which then stores it in one or more topics (as you have configured). for reliability and scalability so it divides the data into even partitions in a topic which makes it faster and more reliable. after that you can consume that data from the topic in your kafka broker/brokers and use it however you want.
 
-You gotta use zookeeper which is for handling the brokers or you can use kraft (i used zookeeper in this project).
+You gotta use **_Zookeeper_** which is for handling the brokers or you can use Kraft (i used zookeeper in this project).
 using a python producer I produced random data and gave it to a single kafka broker, after that with a consumer stored that data into a database. For making consumer and producer i used kafka-python library.
 
 The hardest part between these was connecting the producer and consumer containers to the kafka broker :D, what fixed the problem was checking the server.properties file of kafka.
@@ -30,5 +30,6 @@ db.getCollection(collections[i]).find().forEach(printjson); //and then print the
 
 ## Docker
 
-while making a docker compose file its a best practice to specify the image or dependency versions, using no version or the `latest` version is not the best approach because it can cause instability or security issues. you can read more in [here](https://www.linkedin.com/advice/1/how-do-you-handle-dependencies-updates-your-dockerfile-ensure)
+while making a docker compose file its a best practice to specify the image or dependency versions, using no version or the `latest` version is not the best approach because it can cause instability or security issues. you can read more in [here](https://www.linkedin.com/advice/1/how-do-you-handle-dependencies-updates-your-dockerfile-ensure).
+
 It's better to use a `requirements.txt` file for your dependencies and not just putting them in the middle of the Dockerfile. 
