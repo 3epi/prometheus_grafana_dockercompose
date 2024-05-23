@@ -1,7 +1,11 @@
 FROM docker.arvancloud.ir/python:3.11
 
-RUN pip3 install kafka-python six
+WORKDIR /app
 
-COPY producer.py /producer.py
+COPY requirements.txt ./
 
-CMD ["python3", "/producer.py"]
+RUN pip install -r requirements.txt
+
+COPY producer.py /app/producer.py
+
+CMD ["python3", "/app/producer.py"]
