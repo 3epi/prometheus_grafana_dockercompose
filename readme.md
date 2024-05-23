@@ -21,11 +21,12 @@ and for seeing the data base you can do these steps :
 3. Switching to the desired database : `use "the database you want"`
 4. Showing all your collections : `show collections`
 5.  Showin everything that exists in all the available collections :
-```var collections = db.getCollectionNames();
+```
+var collections = db.getCollectionNames();
 for(var i = 0; i< collections.length; i++) {    
 print('Collection: ' + collections[i]); // print the name of each collection
-db.getCollection(collections[i]).find().forEach(printjson); //and then print the json of each of its elements}``` 
-
+db.getCollection(collections[i]).find().forEach(printjson); //and then print the json of each of its elements}
+```
 
 ## Docker
 
