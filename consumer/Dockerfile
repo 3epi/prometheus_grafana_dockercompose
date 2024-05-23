@@ -1,7 +1,11 @@
 FROM docker.arvancloud.ir/python:3.11
 
-RUN pip3 install kafka-python six pymongo
+WORKDIR /app
 
-COPY consumer.py /consumer.py
+COPY requirements.txt ./
 
-CMD ["python3", "/consumer.py"]
+RUN pip install -r requirements.txt
+
+COPY consumer.py /app/consumer.py
+
+CMD ["python3", "/app/consumer.py"]
