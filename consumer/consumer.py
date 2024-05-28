@@ -3,6 +3,8 @@ import time
 import pymongo
 
 def consume_messages(bootstrap_servers, topic, mycol , group_id='your_group'):
+    batch = []
+    
     while True:
         try:
             consumer = KafkaConsumer(topic,
@@ -20,11 +22,21 @@ def consume_messages(bootstrap_servers, topic, mycol , group_id='your_group'):
                     "key" : message.key ,
                     "value" : message.value
                 }
-                mycol.insert_one(datadict)
+                batch.append(datadict)
+                
+                if len(batch) >= 50:
+                    mycol.insert_many(batch)
+                    batch = []
+        
         except Exception as e:
             print(f"Error connecting to Kafka brokers: {e}")
             print("Retrying in 5 seconds...")
-            time.sleep(5)
+            time.sleep(5)        
+    
+    if batch:
+        mycol.insert_many(batch)
+        batch = []
+        
 
 bootstrap_servers = 'kafka:9092'
 topic = 'mytopic'
