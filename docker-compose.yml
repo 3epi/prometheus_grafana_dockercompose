@@ -73,6 +73,8 @@ services:
     container_name: mongo
     networks:
       - localprom
+    ports:
+      - 27017:27017
 networks:
   localprom:
     driver: bridge
